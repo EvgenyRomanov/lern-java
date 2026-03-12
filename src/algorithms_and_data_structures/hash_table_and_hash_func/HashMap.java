@@ -20,8 +20,7 @@ public class HashMap {
     }
 
     public void add(String key, String value) {
-        int hash  = hashFunction(key);
-        int index = hash % size; // Приводим хэш к размеру массива.
+        int index = findGoodIndex(key);
         entries[index] = new KeyValuePair(key, value);
         numberOfElements++;
 
@@ -35,8 +34,7 @@ public class HashMap {
 
         for (int i = 0; i < size; i++) {
             KeyValuePair entry = entries[i];
-            int hash = hashFunction(entry.key);
-            int newIndex = hash % newSize;
+            int newIndex = findGoodIndex(entry.key);
             newEntries[newIndex] = entry;
         }
 
@@ -45,14 +43,34 @@ public class HashMap {
     }
 
     public String get(String key) {
-        int hash = hashFunction(key);
-        int index = hash % size;
-        KeyValuePair entry = entries[index];
+        int index = findGoodIndex(key);
+        if (index == -1) {
+            return null;
+        }
 
+        KeyValuePair entry = entries[index];
         if (entry == null) {
             return null;
         }
 
         return entry.value;
+    }
+
+    // Линейное пробирование (в случае коллизии).
+    int findGoodIndex(String key) {
+        int hash = hashFunction(key);
+        int index = hash % size; // Приводим хэш к размеру массива.
+
+        // Цикл всегда вернет значение.
+        for (int i = 0; i < size; i++) {
+            int probingIndex = (index + i) % size;
+            KeyValuePair entry = entries[probingIndex];
+
+            if (entry == null || entry.key.equals(key)) {
+                return probingIndex;
+            }
+        }
+
+        return -1; // Для компилятора.
     }
 }
