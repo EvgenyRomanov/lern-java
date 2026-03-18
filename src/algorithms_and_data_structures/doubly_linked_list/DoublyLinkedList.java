@@ -1,5 +1,7 @@
 package algorithms_and_data_structures.doubly_linked_list;
 
+import com.sun.source.tree.WhileLoopTree;
+
 public class DoublyLinkedList {
     class Node {
         int x;
@@ -193,6 +195,36 @@ public class DoublyLinkedList {
         end = t;
     }
 
+    /**
+     * Поиск зацикленности.
+     */
+    public void findCycle() {
+        Node a = start;
+        Node b = start;
+
+        while (true) {
+            if (b == null) break;
+            b = b.next;
+            if (a == b) break;
+            if (b == null) break;
+            b = b.next;
+            if (a == b) break;
+            a = a.next;
+        }
+
+        if (b == null) {
+            System.out.println("No cycle");
+            return;
+        }
+        b = b.next;
+        while (a != b) {
+            System.out.print(b.x + " ");
+            b = b.next;
+        }
+        System.out.print(b.x);
+        System.out.println();
+    }
+
     static void main(String[] args) {
         var dll = new DoublyLinkedList();
         dll.pushBack(1);
@@ -205,5 +237,9 @@ public class DoublyLinkedList {
         // -----
         dll.revert();
         dll.print();
+
+        dll.findCycle();
+        dll.end.next = dll.start;
+        dll.findCycle();
     }
 }
