@@ -2,6 +2,10 @@ package algorithms_and_data_structures.doubly_linked_list;
 
 import com.sun.source.tree.WhileLoopTree;
 
+/**
+ * O(1) - удаление из начала, конца, середины, аналогично вставка.
+ * O(N) - поиск, обращение по индексу.
+ */
 public class DoublyLinkedList {
     class Node {
         int x;
