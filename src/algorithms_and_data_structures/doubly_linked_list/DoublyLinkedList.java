@@ -25,6 +25,7 @@ public class DoublyLinkedList {
         Node t = start;
         while (t != null) {
             System.out.print(t.x + " ");
+            t = t.next;
         }
         System.out.println();
     }
@@ -129,5 +130,80 @@ public class DoublyLinkedList {
         end.next = l.start;
         l.start.prev = end;
         end = l.end;
+    }
+
+    // Возвращается конец развернутого списка.
+    public Node revertRecursive(Node v) {
+        if (v == null) {
+            return null;
+        }
+
+        // Развернуть всё, что идёт после элемента.
+        // Возвращается конец развернутого списка, после него должны записать элемент.
+        Node t = revertRecursive(v.next);
+        if (t != null) {
+            t.next = v;
+        }
+
+        v.prev = t;
+        return v;
+    }
+
+    /**
+     * O(N) + память на стек.
+     */
+    public void revertSlow() {
+        Node tmp = revertRecursive(start);
+        if (tmp != null) {
+            tmp.next = null;
+        }
+
+        Node t = start;
+        start = end;
+        end = t;
+    }
+
+
+    public void revert() {
+        if (start == null) {
+            return;
+        }
+
+        Node a = start;
+        Node b = start.next;
+        a.next = null;
+        if (b == null) {
+            return;
+        }
+        Node c = b.next;
+
+        while (b != null) {
+            b.next = a;
+            a.prev = b;
+            a = b;
+            b = c;
+            if (c != null) {
+                c = c.next;
+            }
+        }
+
+        a.prev = null;
+        Node t = start;
+        start = end;
+        end = t;
+    }
+
+    static void main(String[] args) {
+        var dll = new DoublyLinkedList();
+        dll.pushBack(1);
+        dll.pushBack(2);
+        dll.print();
+
+        dll.revertSlow();
+        dll.print();
+
+        // -----
+        dll.revert();
+        dll.print();
     }
 }
