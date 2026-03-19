@@ -49,8 +49,6 @@ public class Queue {
             data = d;
             head = 0;
             tail = pt;
-
-            return;
         }
 
         data[tail] = x;
